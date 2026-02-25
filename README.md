@@ -1,260 +1,120 @@
+#  <center>🚀 openDDE: Open Drug Design Engine </center>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License">
+  <img src="https://img.shields.io/badge/Python-3.9%2B-green.svg" alt="Python">
+  <img src="https://img.shields.io/badge/Framework-Modular-orange.svg" alt="Framework">
+  <img src="https://img.shields.io/badge/PRs-Welcome-brightgreen.svg" alt="PRs Welcome">
+</p>
+
+**openDDE** 是一个开源、可复现、可扩展的药物设计引擎（Drug Design Engine），专为蛋白-配体及多分子复合物的建模与评估而设计。
+An open-source, reproducible, and extensible orchestration framework for protein–ligand and biomolecular complex modeling.
+
+---
+
+## 🌟 核心优势 | Why openDDE?
+
+目前许多先进的药物设计引擎由于闭源特性，在**可复现性**、**透明度**和**本地化部署**方面存在诸多限制。openDDE 提供：
+
+- 🔓 **完全开源 (Fully Open-Source)**: 透明的编排框架，无黑盒操作。
+- 🔬 **可复现流水线 (Reproducible Pipelines)**: 标准化的结构预测与评分流程。
+- 🧩 **可插拔后端 (Pluggable Backends)**: 轻松集成 Boltz, OpenFold 等多种模型。
+- 🖥 **本地优先 (Local-First)**: 支持完全本地部署，保障数据隐私。
+- 📊 **标准化报告 (Standardized Reporting)**: 内置多维度生物物理指标评测。
+
+---
+
+## 🎯 任务支持 | Project Scope
+
+openDDE 专注于构建**引擎中间层**，支持以下核心任务：
+
+| 任务类型 (Task) | 描述 (Description) |
+| :--- | :--- |
+| **复合物预测** | 蛋白-配体 / 蛋白-蛋白 / 蛋白-核酸复合物结构预测 |
+| **亲和力评估** | 基于回归与排序的结合亲和力预测 (Affinity Scoring) |
+| **约束建模** | 支持模板、距离及位点等空间约束引导建模 |
+| **评估报告** | 自动计算 RMSD, lDDT, DockQ 及置信度汇总 |
+
+---
+
+## 🏗 架构设计 | Architecture
+
+```text
 openDDE
-
-Open Drug Design Engine
-
-An open-source, reproducible, and extensible Drug Design Engine (DDE) for protein–ligand and biomolecular complex modeling.
-
-一个开源、可复现、可扩展的药物设计引擎（Drug Design Engine），用于蛋白-配体及多分子复合物建模与评估。
-
-🚀 Why openDDE?
-
-Closed drug design engines limit reproducibility, transparency, and local deployment.
-
-openDDE provides:
-
-🔓 Fully open-source orchestration framework
-
-🔬 Reproducible structure prediction & scoring pipelines
-
-🧩 Pluggable backend architecture (Boltz, OpenFold, optional adapters)
-
-🖥 Local deployment support (no mandatory cloud dependency)
-
-📊 Standardized evaluation & reporting
-
-闭源药物设计引擎在可复现性、透明度和本地部署方面存在限制。
-
-openDDE 提供：
-
-🔓 完全开源的引擎编排框架
-
-🔬 可复现的结构预测与评分流程
-
-🧩 可插拔模型后端架构（Boltz、OpenFold、可选适配器）
-
-🖥 支持本地部署（无需强制云服务）
-
-📊 标准化评测与报告输出
-
-🎯 Project Scope
-
-openDDE focuses on building a standardized Drug Design Engine layer, not replicating proprietary models.
-
-openDDE 的目标是构建标准化的“药物设计引擎层”，而不是复刻任何闭源模型。
-
-Supported task types:
-
-支持的任务类型包括：
-
-Complex Structure Prediction
-Protein–ligand / protein–protein / protein–nucleic acid complexes
-蛋白-配体 / 蛋白-蛋白 / 蛋白-核酸复合物结构预测
-
-Binding Affinity Estimation
-Ranking and regression-based scoring
-结合亲和力排序与回归预测
-
-Constraint-Guided Modeling
-Template constraints / distance constraints / site constraints
-模板约束 / 距离约束 / 位点约束建模
-
-Evaluation & Reporting
-RMSD / lDDT / DockQ / confidence aggregation
-结构评测与置信度汇总
-
-🏗 Architecture
-openDDE
- ├── pipeline      # Task orchestration
- ├── backends      # Model adapters
- ├── tasks         # Structure / affinity / pocket
- ├── scoring       # Metrics & confidence
- ├── data          # Featurization
- ├── viz           # Reporting
-
-Design principles:
-
-设计原则：
-
-Backend-agnostic engine
-
-No redistribution of restricted weights
-
-Reproducible pipelines
-
-Modular evaluation framework
-
-⚡ Quickstart
-1️⃣ Installation
+ ├── 🛰 pipeline     # 任务编排 (Task orchestration)
+ ├── 🔌 backends     # 模型适配器 (Model adapters: Boltz, OpenFold, etc.)
+ ├── 🧬 tasks        # 核心任务 (Structure / Affinity / Pocket)
+ ├── 📏 scoring      # 指标与置信度 (Metrics & confidence)
+ ├── 💾 data         # 特征工程 (Featurization)
+ └── 📊 viz          # 视觉化报告 (Reporting & Visualization)
+```
+---
+## ⚡ 快速上手 | Quickstart
+####  1. 安装 (Installation)
+```bash
+# 克隆仓库
 git clone https://github.com/yourname/openDDE.git
 cd openDDE
+
+# 开发模式安装
 pip install -e .
 
-Optional (backend setup):
-
-可选（安装模型后端）：
-
+# 可选：安装后端支持 (例如 Boltz)
 pip install boltz
-2️⃣ Run Structure Prediction
+```
+#### 2. 运行结构预测 (Structure Prediction)
+```bash
 opendde predict \
   --protein protein.fasta \
   --ligand ligand.sdf \
   --backend boltz2 \
-  --output results/
-
-Output:
-
-输出内容：
-
-Complex structure (CIF/PDB)
-
-Confidence summary (JSON)
-
-Evaluation metrics (optional)
-
-3️⃣ Run Binding Scoring
-opendde score \
-  --complex complex.cif \
-  --backend boltz2
-🔌 Backends
-
-openDDE does not bundle proprietary weights.
-
-openDDE 不包含任何受限模型权重。
-
-Supported backends (extensible):
-
-当前支持的后端（可扩展）：
-
-Backend	Type	Status
-Boltz-2	Structure + Affinity	✅
-Boltz-1	Structure	✅
-OpenFold	Protein Folding	✅
-AF3 Adapter	Optional adapter	⚠ User-provided weights only
-
-Adapters standardize:
-
-统一接口规范：
-
-predict()
-score()
-supports_constraints()
-📊 Evaluation
-
-Supported metrics:
-
-支持的评测指标：
-
-RMSD
-
-lDDT
-
-DockQ
-
-Interface confidence
-
-Affinity correlation (Pearson/Spearman)
-
-Run benchmark:
-
-运行基准评测：
-
-opendde eval --benchmark pdbbind
-🧪 Reproducibility
-
-openDDE emphasizes deterministic workflows:
-
-openDDE 强调可复现流程：
-
-Fixed config templates
-
-Logged inference settings
-
-Version-locked dependencies
-
-Standardized reporting
-
-🛡 Compliance & Legal Notice
-
-openDDE:
-
-Is not affiliated with Google DeepMind or Isomorphic Labs
-
-Does not distribute restricted model weights
-
-Does not bypass any access controls
-
-openDDE：
-
-与 Google DeepMind 或 Isomorphic Labs 无隶属关系
-
-不分发受限模型权重
-
-不提供任何绕过访问控制的内容
-
-🛣 Roadmap
-v0.1
-
-Basic CLI
-
-Boltz backend
-
-CIF output
-
-v0.2
-
-Benchmark suite
-
-Docker support
-
-Affinity scoring baseline
-
-v1.0
-
-Multi-backend support
-
-Constraint modeling
-
-Full evaluation dashboard
-
-🤝 Contributing
-
-We welcome contributions in:
-
-欢迎以下方向的贡献：
-
-New backend adapters
-
-Improved scoring modules
-
-Dataset integration
-
-Performance optimization
-
-Documentation improvements
-
-Please read CONTRIBUTING.md before submitting a PR.
-
-📜 License
-
-Apache 2.0 License
-
-📖 Citation
-
-If you use openDDE in research, please cite:
-
-如果在科研中使用 openDDE，请引用：
-
+  --output ./results/
+```
+#### 3. 亲和力评分 (Binding Scoring)
+```bash
+opendde score --complex ./results/complex.cif --backend boltz2
+```
+---
+## 🔌 后端适配器 | Supported Backends
+openDDE 通过适配器模式支持多种后端，且**不包含任何受限模型权重**。
+
+| Backend | Task Type | Status | Note |
+| :--- | :--- | :--- | :--- |
+| **Boltz-2** | Structure + Affinity | ✅ | Recommended |
+| **Boltz-1** | Structure | ✅ | Stable |
+| **OpenFold** | Protein Folding | ✅ | - |
+| **AF3 Adapter** | All-atom | ⚠ | 需要用户自备权重 (User-provided weights only) |
+---
+## 🧪 评测与可复现性 | Evaluation
+我们强调 "Deterministic Workflows"（确定性工作流）：
+固定配置：所有推理参数均通过配置文件锁定。
+环境一致性：依赖库版本锁定，确保结果在不同设备间可比。
+基准测试：```bash opendde eval --benchmark pdbbind      ```
+
+---
+## 🛣 路线图 | Roadmap
+**[x] v0.1**: 基础 CLI 工具、Boltz 后端集成、CIF 格式输出。
+
+**[ ] v0.2**: Benchmark 基准测试套件、Docker 镜像支持、亲和力评分基线。
+
+**[ ] v1.0**: 多后端并行支持、约束建模、可视化 Dashboard。
+
+---
+## 🛡 合规性声明 | Compliance
+**Notice**: openDDE 是一个独立的研究框架。
+1. 与 Google DeepMind 或 Isomorphic Labs 无任何隶属关系。
+2. 不分发、不托管任何受版权保护或受限的模型权重。
+3. 用户需遵守所使用后端模型的原始许可协议（如 Boltz, OpenFold 等）。
+
+## 🤝 贡献与引用 | Contributing & Citation
+我们欢迎任何形式的贡献！
+```
 @software{opendde2026,
-  title = {openDDE: Open Drug Design Engine},
+  author = {openDDE Contributors},
+  title = {openDDE: An Open-source Drug Design Engine},
   year = {2026},
   url = {https://github.com/yourname/openDDE}
 }
-🌍 Vision
-
-Open infrastructure accelerates science.
-
-开放基础设施，加速科学创新。
-
-openDDE aims to make high-level drug design infrastructure transparent, extensible, and accessible to researchers worldwide.
-
-openDDE 致力于构建透明、可扩展、可全球部署的药物设计基础设施。
+```
+<p align="center"><b>Open infrastructure accelerates science.</br>
+开放基础设施，加速科学创新。</p>
